@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Money Tracker App</title>
+</head>
+<body>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+  
+  .container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #8D9093;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-bottom: 8px;
+  }
+  
+  input, select {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  </style>
+  <div class="container">
+    <h1>Money Tracker</h1>
+    <form action="/api/expenses" method="post">
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description" required>
+
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" required>
+
+      <label for="type">Type:</label>
+      <select id="type" name="type" required>
+        <option value="income">Income</option>
+        <option value="expense">Expense</option>
+      </select>
+
+      <button type="submit">Add Expense</button>
+    </form>
+
+    <h2>Expense History</h2>
+    <ul id="expenseList"></ul>
+  </div>
+
+  <script>
+    // Fetch and display expenses when the page loads
+    window.onload = async function () {
+      const response = await fetch('/api/expenses');
+      const expenses = await response.json();
+
+      const expenseList = document.getElementById('expenseList');
+      expenses.forEach(expense => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${expense.description}: $${expense.amount} (${expense.type})`;
+        expenseList.appendChild(listItem);
+      });
+    };
+  </script>
+</body>
+</html>
